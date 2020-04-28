@@ -8,8 +8,8 @@ import Person from "./Person/Person";
 class App extends Component {
   state = {
     persons: [
-      { name: "Maximilian", age: 30 },
-      { name: "Manu", age: 20 },
+      { id: "0", name: "Maximilian", age: 30, hobby: "football" },
+      { id: "1", name: "Manu", age: 20, hobby: "tennis" },
     ],
     showPersons: true,
   };
@@ -17,18 +17,27 @@ class App extends Component {
   handleSwitchName = (newName) => {
     this.setState({
       persons: [
-        { name: newName, age: 20 },
-        { name: "Thomas", age: 30 },
+        { name: newName, age: 20, hobby: "football" },
+        { name: "Thomas", age: 30, hobby: "football" },
       ],
     });
   };
 
-  handleInputChange = (event) => {
+  handleInputChange = (event, id) => {
+    const personIndex = this.state.persons.findIndex((p) => {
+      return p.id === id;
+    });
+
+    const person = {
+      ...this.state.persons[personIndex],
+    };
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
     this.setState({
-      persons: [
-        { name: "Max22", age: 20 },
-        { name: event.target.value, age: 30 },
-      ],
+      persons,
     });
   };
 
@@ -37,6 +46,12 @@ class App extends Component {
     this.setState({
       showPersons: !doesShow,
     });
+  };
+
+  deletePerson = (personIndex) => {
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({ persons });
   };
 
   render() {
@@ -54,19 +69,22 @@ class App extends Component {
     if (showPersons) {
       personsItems = (
         <div>
-          <Person
-            name={persons[0].name}
-            age={persons[0].age}
-            click={this.handleSwitchName}
-            handleChange={this.handleInputChange}
-          />
-          <Person
-            name={persons[1].name}
-            age={persons[1].age}
-            click={this.handleSwitchName.bind(this, "Paul")}
-          >
-            My bobby: football
-          </Person>
+          {persons.map((person, index) => {
+            return (
+              <Person
+                key={person.id}
+                age={person.age}
+                name={person.name}
+                click={this.handleSwitchName}
+                handleChange={(event) =>
+                  this.handleInputChange(event, person.id)
+                }
+                delete={() => this.deletePerson(index)}
+              >
+                My bobby:{person.hobby}
+              </Person>
+            );
+          })}
         </div>
       );
     }
@@ -78,23 +96,6 @@ class App extends Component {
         </button>
         <h1>I'm a react App</h1>
         {personsItems}
-        {/* {showPersons ? (
-          <div>
-            <Person
-              name={persons[0].name}
-              age={persons[0].age}
-              click={this.handleSwitchName}
-              handleChange={this.handleInputChange}
-            />
-            <Person
-              name={persons[1].name}
-              age={persons[1].age}
-              click={this.handleSwitchName.bind(this, "Paul")}
-            >
-              My bobby: football
-            </Person>
-          </div>
-        ) : null} */}
       </div>
     );
   }
