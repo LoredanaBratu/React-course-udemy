@@ -13,6 +13,34 @@ class App extends Component {
       { id: "0", name: "Maximilian", age: 30, hobby: "football" },
       { id: "1", name: "Manu", age: 20, hobby: "tennis" },
     ],
+    form: {
+      typeOfArea: [
+        {
+          type: "CRAFT",
+          description: "type description",
+          actionTypes: [
+            { action: "action text", timing: "data", measure: "measure text" },
+            {
+              action: "action text2",
+              timing: "data",
+              measure: "measure text2",
+            },
+          ],
+        },
+        {
+          type: "EDUCATE/INSPIRE",
+          description: "type description",
+          actionTypes: [
+            { action: "action text", timing: "data", measure: "measure text" },
+            {
+              action: "action text2",
+              timing: "data",
+              measure: "measure text2",
+            },
+          ],
+        },
+      ],
+    },
     checks: [
       { id: 0, value: "craft", isChecked: true },
       { id: 1, value: "educate", isChecked: false },
@@ -84,7 +112,7 @@ class App extends Component {
   deleteCharacter = (index) => {
     const text = this.state.inputValue.split(""); //now it is an array of characters(strings)
     text.splice(index, 1); //delete
-    const updatedText = text.join(""); //remade- tranfosrm array of strings into a string
+    const updatedText = text.join(""); //remade- tranform array of strings into a string
     this.setState({ inputValue: updatedText });
   };
 
@@ -105,6 +133,28 @@ class App extends Component {
       checks,
     });
   };
+
+  handleAddFields() {
+    const { form } = this.state;
+    const { typeOfArea } = form;
+
+    Object.entries(typeOfArea).map((el) =>
+      el[1].actionTypes.push({
+        action: null,
+        measure: null,
+        timing: null,
+      })
+    );
+    // typeOfArea[0].actionTypes.push({
+    //   action: null,
+    //   measure: null,
+    //   timing: null,
+    // });
+    console.log(this.state);
+    // this.setState({
+    //   rowData,
+    // })
+  }
 
   render() {
     const style = {
@@ -142,25 +192,20 @@ class App extends Component {
       style.background = "red";
     }
 
-    // const letter = this.state.inputValue.split("").map((character, index) => {
-    //   return (
-    //     <CharComponent
-    //       letter={character}
-    //       key={index}
-    //       click={() => this.deleteCharacter(index)}
-    //     />
-    //   );
-    // });
-
     const letter = this.state.checks.map((character, index) => {
-      debugger;
       if (character.isChecked) {
         return (
-          <CharComponent
-            // letter={character}
-            key={index}
-            click={() => this.deleteCharacter(index)}
-          />
+          <div>
+            <input type="text"></input>
+            <p>{character.value}</p>
+            <CharComponent
+              form={this.state.form}
+              // letter={character}
+              key={index}
+              click={() => this.deleteCharacter(index)}
+            />
+            <div onClick={() => this.handleAddFields()}>+</div>
+          </div>
         );
       }
     });
