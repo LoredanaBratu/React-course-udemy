@@ -4,9 +4,6 @@ import Person from "./Person/Person";
 import ValidationComponent from "./ValidationComponent/ValidationComponent";
 import CharComponent from "./ValidationComponent/CharComponent";
 
-// useState  always returns an array with 2 elements (current state and a function taht allows to update the state )
-//useState->array
-
 class App extends Component {
   state = {
     persons: [
@@ -16,28 +13,34 @@ class App extends Component {
     form: {
       typeOfArea: [
         {
-          type: "CRAFT",
-          description: "type description",
-          actionTypes: [
-            { action: "action text", timing: "data", measure: "measure text" },
-            {
-              action: "action text2",
-              timing: "data",
-              measure: "measure text2",
-            },
-          ],
+          type: "craft",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
         },
         {
-          type: "EDUCATE/INSPIRE",
-          description: "type description",
-          actionTypes: [
-            { action: "action text", timing: "data", measure: "measure text" },
-            {
-              action: "action text2",
-              timing: "data",
-              measure: "measure text2",
-            },
-          ],
+          type: "educate/inspire",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "commercial",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "management",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "digital",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "other",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
         },
       ],
     },
@@ -117,43 +120,51 @@ class App extends Component {
   };
 
   handleCheck = (index, event) => {
-    const checkboxIndex = this.state.checks.findIndex((e) => {
-      return e.id === index;
-    });
+    const { checkboxItems } = this.state.form;
 
-    const checkbox = {
-      ...this.state.checks[checkboxIndex],
-    };
-    checkbox.isChecked = event.target.checked;
+    const currentValue = checkboxItems[index].isChecked;
+    const copyedEl = [...checkboxItems];
+    copyedEl[index].isChecked = !currentValue;
 
-    const checks = [...this.state.checks];
-    checks[checkboxIndex] = checkbox;
+    this.setState((prev) => ({
+      liteCoachForm: {
+        ...prev.form,
+        checkboxItems: copyedEl,
+      },
+    }));
 
-    this.setState({
-      checks,
-    });
+    // const checkboxIndex = this.state.checks.findIndex((e) => {
+    //   return e.id === index;
+    // });
+
+    // const checkbox = {
+    //   ...this.state.checks[checkboxIndex],
+    // };
+    // checkbox.isChecked = event.target.checked;
+
+    // const checks = [...this.state.checks];
+    // checks[checkboxIndex] = checkbox;
+
+    // this.setState({
+    //   checks,
+    // });
   };
 
-  handleAddFields() {
+  handleAddFields(type) {
     const { form } = this.state;
     const { typeOfArea } = form;
 
-    Object.entries(typeOfArea).map((el) =>
-      el[1].actionTypes.push({
-        action: null,
-        measure: null,
-        timing: null,
-      })
-    );
-    // typeOfArea[0].actionTypes.push({
-    //   action: null,
-    //   measure: null,
-    //   timing: null,
-    // });
-    console.log(this.state);
-    // this.setState({
-    //   rowData,
-    // })
+    Object.entries(typeOfArea).map((el) => {
+      const currElement = el[1];
+      if (currElement.type === type.toLowerCase()) {
+        currElement.actionTypes.push({
+          action: null,
+          measure: null,
+          timing: null,
+        });
+      }
+    });
+    this.setState({});
   }
 
   render() {
@@ -193,18 +204,21 @@ class App extends Component {
     }
 
     const letter = this.state.checks.map((character, index) => {
+      const NO_ROWS = this.state.form.typeOfArea[index].actionTypes;
       if (character.isChecked) {
         return (
           <div>
             <input type="text"></input>
             <p>{character.value}</p>
-            <CharComponent
-              form={this.state.form}
-              // letter={character}
-              key={index}
-              click={() => this.deleteCharacter(index)}
-            />
-            <div onClick={() => this.handleAddFields()}>+</div>
+            {NO_ROWS.map((rows) => (
+              <CharComponent
+                form={this.state.form}
+                // letter={character}
+                key={index}
+                click={() => this.deleteCharacter(index)}
+              />
+            ))}
+            <div onClick={() => this.handleAddFields(character.value)}>+</div>
           </div>
         );
       }
