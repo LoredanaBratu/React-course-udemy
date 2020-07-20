@@ -4,10 +4,24 @@ import Person from "./Person/Person";
 import ValidationComponent from "./Validation/ValidationComponent";
 import CharComponent from "./Validation/CharComponent";
 import Radium from "radium";
+import styled from "styled-components";
 
 // useState  always returns an array with 2 elements (current state and a function taht allows to update the state )
 //useState->array
 
+const StyledButton = styled.button`
+      background: ${(props) => (props.cond ? "green" : "red")};
+      padding: 8px;
+      cursor: pointer;
+      margin: 10px auto;
+      border: 1px solid black;
+      color: white;
+  &:hover {
+        background: ${(props) => (props.cond ? "lightgreen" : "salmon")} ;
+        color: black;
+      },
+
+`;
 class App extends Component {
   state = {
     persons: [
@@ -112,7 +126,6 @@ class App extends Component {
   };
 
   render() {
-    console.log("test");
     const style = {
       background: "green",
       padding: "8px",
@@ -152,6 +165,7 @@ class App extends Component {
           })}
         </div>
       );
+
       style.background = "red";
       style[":hover"] = {
         //si aici !!! tot cu Radium
@@ -204,13 +218,14 @@ class App extends Component {
     return (
       <div className="App">
         <h1>I'm a react App</h1>
-        <button style={style} onClick={this.handleTogglePersons}>
+        {/* <button style={style} onClick={this.handleTogglePersons}> in-line style cu radium */}
+
+        <StyledButton cond={showPersons} onClick={this.handleTogglePersons}>
           Toggle Persons
-        </button>
+        </StyledButton>
         <h1>I'm a react App</h1>
         <p className={classes.join(" ")}>This really works!</p>
         {personsItems}
-
         <input
           type="text"
           value={inputValue}
