@@ -72,6 +72,7 @@ class App extends Component {
   };
 
   render() {
+    console.log("test");
     const style = {
       background: "green",
       padding: "8px",
