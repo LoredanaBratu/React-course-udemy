@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { Component } from "react";
 import "./App.css";
 import Person from "./Person/Person";
 import ValidationComponent from "./Validation/ValidationComponent";
@@ -14,6 +14,46 @@ class App extends Component {
       { id: "0", name: "Maximilian", age: 30, hobby: "football" },
       { id: "1", name: "Manu", age: 20, hobby: "tennis" },
     ],
+    form: {
+      typeOfArea: [
+        {
+          type: "craft",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "educate/inspire",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "commercial",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "management",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "digital",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+        {
+          type: "other",
+          description: "",
+          actionTypes: [{ action: "", timing: "", measure: "" }],
+        },
+      ],
+    },
+    checks: [
+      { id: 0, value: "craft", isChecked: true },
+      { id: 1, value: "educate", isChecked: false },
+      { id: 2, value: "comercial", isChecked: false },
+    ],
+
     showPersons: true,
     inputValue: "",
   };
@@ -77,6 +117,7 @@ class App extends Component {
       background: "green",
       padding: "8px",
       cursor: "pointer",
+      background: "green",
       margin: "10px auto",
       border: "1px solid black",
       color: "white",
@@ -139,10 +180,32 @@ class App extends Component {
       classes.push("red", "bold");
     }
 
+    const letter = this.state.checks.map((character, index) => {
+      const NO_ROWS = this.state.form.typeOfArea[index].actionTypes;
+      if (character.isChecked) {
+        return (
+          <div>
+            <input type="text"></input>
+            <p>{character.value}</p>
+            {NO_ROWS.map((rows) => (
+              <CharComponent
+                form={this.state.form}
+                // letter={character}
+                key={index}
+                click={() => this.deleteCharacter(index)}
+              />
+            ))}
+            <div onClick={() => this.handleAddFields(character.value)}>+</div>
+          </div>
+        );
+      }
+    });
+
     return (
       <div className="App">
+        <h1>I'm a react App</h1>
         <button style={style} onClick={this.handleTogglePersons}>
-          Hide content
+          Toggle Persons
         </button>
         <h1>I'm a react App</h1>
         <p className={classes.join(" ")}>This really works!</p>
