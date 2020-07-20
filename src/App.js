@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import classes from "./App.css";
 import Person from "./Person/Person";
 import ValidationComponent from "./Validation/ValidationComponent";
 import CharComponent from "./Validation/CharComponent";
@@ -9,19 +9,6 @@ import styled from "styled-components";
 // useState  always returns an array with 2 elements (current state and a function taht allows to update the state )
 //useState->array
 
-const StyledButton = styled.button`
-      background: ${(props) => (props.cond ? "green" : "red")};
-      padding: 8px;
-      cursor: pointer;
-      margin: 10px auto;
-      border: 1px solid black;
-      color: white;
-  &:hover {
-        background: ${(props) => (props.cond ? "lightgreen" : "salmon")} ;
-        color: black;
-      },
-
-`;
 class App extends Component {
   state = {
     persons: [
@@ -126,22 +113,8 @@ class App extends Component {
   };
 
   render() {
-    const style = {
-      background: "green",
-      padding: "8px",
-      cursor: "pointer",
-      background: "green",
-      margin: "10px auto",
-      border: "1px solid black",
-      color: "white",
-      ":hover": {
-        //due to Radium we can set such proporties in inline style !!!!
-        background: "lightgreen",
-        color: "black",
-      },
-    };
-
     const { persons, showPersons, inputValue } = this.state;
+    let btnClass = [classes.Button];
 
     let personsItems = null;
     if (showPersons) {
@@ -165,13 +138,7 @@ class App extends Component {
           })}
         </div>
       );
-
-      style.background = "red";
-      style[":hover"] = {
-        //si aici !!! tot cu Radium
-        background: "salmon",
-        color: "black",
-      };
+      btnClass.push(classes.Red);
     }
 
     const charList = inputValue.split("").map((character, index) => {
@@ -186,12 +153,12 @@ class App extends Component {
       );
     });
 
-    const classes = [];
+    const assignedClasses = [];
     if (persons.length <= 2) {
-      classes.push("red");
+      assignedClasses.push(classes.red);
     }
     if (persons.length <= 1) {
-      classes.push("red", "bold");
+      assignedClasses.push(classes.red, classes.bold);
     }
 
     const letter = this.state.checks.map((character, index) => {
@@ -215,16 +182,22 @@ class App extends Component {
       }
     });
 
+    console.log(btnClass);
     return (
-      <div className="App">
+      <div className={classes.App}>
         <h1>I'm a react App</h1>
         {/* <button style={style} onClick={this.handleTogglePersons}> in-line style cu radium */}
 
-        <StyledButton cond={showPersons} onClick={this.handleTogglePersons}>
+        {/* <StyledButton cond={showPersons} onClick={this.handleTogglePersons}> */}
+        <button
+          onClick={this.handleTogglePersons}
+          className={btnClass.join(" ")}
+        >
           Toggle Persons
-        </StyledButton>
+        </button>
+        {/* </StyledButton> */}
         <h1>I'm a react App</h1>
-        <p className={classes.join(" ")}>This really works!</p>
+        <p className={assignedClasses.join(" ")}>This really works!</p>
         {personsItems}
         <input
           type="text"

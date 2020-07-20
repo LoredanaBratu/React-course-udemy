@@ -7,3 +7,25 @@
 .bold {
   font-weight: bold;
 }
+
+.Button {
+  background: green;
+  padding: 8px;
+  cursor: pointer;
+  margin: 10px auto;
+  border: 1px solid black;
+  color: white;
+}
+
+.Button:hover {
+  background: lightgreen;
+  color: black;
+}
+
+.Button.Red {
+  background: red;
+}
+
+.Button.Red:hover {
+  background: salmon;
+}
