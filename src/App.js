@@ -4,7 +4,8 @@ import Person from "./Person/Person";
 import ValidationComponent from "./Validation/ValidationComponent";
 import CharComponent from "./Validation/CharComponent";
 import Radium from "radium";
-import styled from "styled-components";
+
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 
 // useState  always returns an array with 2 elements (current state and a function taht allows to update the state )
 //useState->array
@@ -122,18 +123,19 @@ class App extends Component {
         <div>
           {persons.map((person, index) => {
             return (
-              <Person
-                key={person.id}
-                age={person.age}
-                name={person.name}
-                click={this.handleSwitchName}
-                handleChange={(event) =>
-                  this.handleInputChange(event, person.id)
-                }
-                delete={() => this.deletePerson(index)}
-              >
-                My bobby:{person.hobby}
-              </Person>
+              <ErrorBoundary key={person.id}>
+                <Person
+                  age={person.age}
+                  name={person.name}
+                  click={this.handleSwitchName}
+                  handleChange={(event) =>
+                    this.handleInputChange(event, person.id)
+                  }
+                  delete={() => this.deletePerson(index)}
+                >
+                  My bobby:{person.hobby}
+                </Person>
+              </ErrorBoundary>
             );
           })}
         </div>
